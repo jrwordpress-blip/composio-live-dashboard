@@ -138,9 +138,10 @@ async function load(){
     if(!res.ok)throw new Error('HTTP '+res.status);
     const rows=parseCSV(await res.text());
     if(rows.length<2)throw new Error('empty sheet');
+    const syncedAt=(rows[0]&&rows[0][16]!==undefined)?String(rows[0][16]).trim():'';
     D=build(rows); lastGood=rows;
     const now=new Date();
-    $('gen').textContent=`${D.kpi.total} sites · live · updated ${now.toLocaleTimeString()} · WordPress SOP v3`;
+    $('gen').textContent=`${D.kpi.total} sites${syncedAt?' · data synced '+syncedAt:''} · WordPress SOP v3`;
     $('banner').style.display='none';
     renderAll();
     setLive('live','Live · '+now.toLocaleTimeString());
